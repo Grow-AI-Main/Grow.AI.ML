@@ -7,5 +7,6 @@ class cluster:
             self.km = pickle.load(f)
 
     
-    def cluster(self, vec):
+    def predict(self, vec):
         cluster = self.km.predict(vec)
+        return cluster
