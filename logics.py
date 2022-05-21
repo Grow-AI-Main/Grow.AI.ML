@@ -1,5 +1,6 @@
 import keras_model
 import cluster
+import recommendation
 import numpy as np
 import pandas as pd
 
@@ -7,12 +8,13 @@ class logics:
     def __init__(self):
         self.keras_model = keras_model()
         self.cluster = cluster()
+        self.recommendation = recommendation()
         self.clusters = {}
 
-        load_clusters(self)
+        __load_clusters(self)
 
 
-def load_clusters(self):
+def __load_clusters(self):
     df = pd.read_csv('.\Data\relevant_filterd_Data.csv')
     df.drop(['User Id'], axis=1, inplace=True)
     df = df.fillna('')
