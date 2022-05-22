@@ -1,30 +1,23 @@
+import json
+import logics
 from flask import Flask, jsonify, request
 from numpy import number
 
+logics = logics()
 app = Flask(__name__)
 
 @app.route('/ping/', methods=['GET', 'POST'])
 def welcome():
     return "pong!"
 
-@app.route('/<int:number>/')
-def incrementer(number):
-    return "Incremented number is " + str(number+1)
-
-@app.route('/numbers/')
-def print_list():
-    return jsonify(list(range(5)))
-
-@app.route("/json", methods=["POST"])
-def json_example():
+@app.route("/analyze", methods=["POST"])
+def analyze():
 
     req = request.get_json()
 
-    print(req)
+    analyzed_user_data = logics.analyze_user(json)
 
-    req['number'] += 5
-
-    return jsonify(req), 201
+    return jsonify(analyzed_user_data), 200
 
 if __name__ == '__main__':
     app.run(port=105)
