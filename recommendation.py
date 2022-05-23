@@ -76,10 +76,10 @@ class recommendation:
             keys_to_remove = ["Recommended First Degree Field","Recommended First Degree Level", "Recommended top 3 First Degree Instituion"]
 
         #in this case, if a person studied the right degree but in the wrong place,, we'll still drop the degree recommendation but add a note that says that
-        elif (user_input['First Degree Field'] == recommeded_education_general['Recommended First Degree Field'] and
-            user_input['First Degree Institution Name'] not in recommeded_education_general['Recommended top 3 First Degree Instituion']):
-                recommeded_education_general.update({'Other First Degree Recommendations: the people who are similar to you studied at' : recommeded_education_general['Recommended top 3 First Degree Instituion']} )
-                keys_to_remove = ["Recommended First Degree Field","Recommended First Degree Level", "Recommended top 3 First Degree Instituion"]
+        elif (user_input['First Degree Field'] == recommeded_education_general['Recommended First Degree Field'] and 
+        user_input['First Degree Institution Name'] not in recommeded_education_general['Recommended top 3 First Degree Instituion']):
+            recommeded_education_general.update({'Other First Degree Recommendations: the people who are similar to you studied at' : recommeded_education_general['Recommended top 3 First Degree Instituion']} )
+            keys_to_remove = ["Recommended First Degree Field","Recommended First Degree Level", "Recommended top 3 First Degree Instituion"]
 
         #in the case below - the same goes for a second degree 
         if (user_input['Second Degree Field'] == recommeded_education_general['Recommended Second Degree Field'] and
@@ -90,7 +90,6 @@ class recommendation:
         user_input['Second Degree Institution Name'] not in recommeded_education_general['Recommended top 3 Second Degree Instituion']):
             recommeded_education_general.update({'Other Second Degree Recommendations: the people who are similar to you studied at' : recommeded_education_general['Recommended top 3 Second Degree Instituion']} )
             keys_to_remove = ["Recommended Second Degree Level","Recommended First Degree Field","Recommended top 3 Second Degree Instituion"]
-
         
         for key in keys_to_remove:
             del recommeded_education_general[key]
@@ -103,9 +102,9 @@ class recommendation:
         remove_from_user_input = set()  
         for i in range (1,9):
             for j in range (1,9):
-            if user_input[f'Experience {i} Job Title'] == recommeded_education_general[f'Recommended job {j}'][0]:
-                remove_from_user_input.add(user_input[f'Experience {i} Job Title'])
-                remove_from_recommendation_before_user.add(f'Recommended job {j}')
+                if user_input[f'Experience {i} Job Title'] == recommeded_education_general[f'Recommended job {j}'][0]:
+                    remove_from_user_input.add(user_input[f'Experience {i} Job Title'])
+                    remove_from_recommendation_before_user.add(f'Recommended job {j}')
         
         for key in remove_from_recommendation_before_user:
             del recommeded_education_general[key]

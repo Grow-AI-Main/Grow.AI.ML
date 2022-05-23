@@ -3,7 +3,7 @@ import logics
 from flask import Flask, jsonify, request
 from numpy import number
 
-logics = logics()
+logics = logics.logics()
 app = Flask(__name__)
 
 @app.route('/ping/', methods=['GET', 'POST'])
@@ -15,7 +15,7 @@ def analyze():
 
     req = request.get_json()
 
-    analyzed_user_data = logics.analyze_user(json)
+    analyzed_user_data = logics.analyze_user(req)
 
     return jsonify(analyzed_user_data), 200
 

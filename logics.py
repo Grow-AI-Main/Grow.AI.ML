@@ -5,20 +5,22 @@ import cluster
 import recommendation
 import numpy as np
 import pandas as pd
+import os
 
 class logics:
     def __init__(self):
-        self.converter = converter()
-        self.keras_model = keras_model()
-        self.cluster = cluster()
-        self.recommendation = recommendation()
+        self.converter = converter.converter()
+        self.keras_model = keras_model.keras_model()
+        self.cluster = cluster.cluster()
+        self.recommendation = recommendation.recommendation()
         self.clusters = {}
 
         self.__load_clusters()
 
 
     def __load_clusters(self):
-        df = pd.read_csv('.\Data\relevant_filterd_Data.csv')
+        df_path = os.getcwd() + '\Data\relevant_filterd_Data.csv'
+        df = pd.read_csv(df_path)
         df.drop(['User Id'], axis=1, inplace=True)
         df = df.fillna('')
 
