@@ -11,18 +11,21 @@ class logics:
     def __init__(self):
         self.keras_model = keras_model.keras_model()
         self.cluster = cluster.cluster()
+        self.recommendation = recommendation.recommendation()
         self.clusters = {}
 
         self.__load_clusters()
 
 
     def __load_clusters(self):
-        df_path = os.getcwd() + '/Data/relevant_filterd_Data.csv'
-        df = pd.read_csv(df_path)
+        df = pd.read_csv(os.getcwd() + '/Data/relevant_filterd_Data.csv')
         df.drop(['User Id'], axis=1, inplace=True)
         df = df.fillna('')
 
         items_features_dict = {name: np.array(value) for name, value in df.items()}
+
+        # Save DataFrame to self
+        self.df = df
 
         encoded_items = self.keras_model.preprocess_and_encode(items_features_dict)
 
@@ -46,4 +49,10 @@ class logics:
 
         cluster = self.cluster.predict(encoded_item)
 
-        return cluster
+        similar_users = self.df.iloc[self.clusters[cluster[0]]]
+
+        user_input = {name: value for name, value in user_df.iloc[0].items()}
+
+        recommend = self.recommendation.final_career_recommendation(similar_users, user_input)
+
+        return recommend
