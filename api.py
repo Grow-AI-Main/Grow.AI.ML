@@ -1,12 +1,10 @@
-import json
 import logics
 from flask import Flask, jsonify, request
-from numpy import number
 
 logics = logics.logics()
 app = Flask(__name__)
 
-@app.route('/ping/', methods=['GET', 'POST'])
+@app.route('/ping', methods=['GET', 'POST'])
 def welcome():
     return "pong!"
 
