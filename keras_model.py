@@ -1,6 +1,6 @@
 from tensorflow import keras
 
-class keras_model:
+class KerasModel:
     def __init__(self):
         # Load preprocessing layer
         self.preprocessing_layer = keras.models.load_model('.\Models\preprocessing_layer')

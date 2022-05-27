@@ -3,7 +3,7 @@ from collections import Counter
 from statistics import mean
 
 
-class recommendation:
+class Recommendation:
     # That's how we find out the most occuring item in a column
     def __find_most_common_item_in_column(self, df, column):
         df_after_droping_naans = df.drop(df[df[column] == ''].index)

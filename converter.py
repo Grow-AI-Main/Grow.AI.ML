@@ -1,7 +1,7 @@
 from numpy import NaN
 import pandas as pd
 
-class converter:
+class Converter:
     def convert_to_user_df(json):
         data = {}
 

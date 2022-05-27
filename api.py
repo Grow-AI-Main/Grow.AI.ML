@@ -1,7 +1,7 @@
 import logics
 from flask import Flask, jsonify, request
 
-logics = logics.logics()
+logics = logics.Logics()
 app = Flask(__name__)
 
 @app.route('/ping', methods=['GET', 'POST'])

@@ -7,11 +7,11 @@ import numpy as np
 import pandas as pd
 import os
 
-class logics:
+class Logics:
     def __init__(self):
-        self.keras_model = keras_model.keras_model()
-        self.cluster = cluster.cluster()
-        self.recommendation = recommendation.recommendation()
+        self.keras_model = keras_model.KerasModel()
+        self.cluster = cluster.Cluster()
+        self.recommendation = recommendation.Recommendation()
         self.clusters = {}
 
         self.__load_clusters()
@@ -41,7 +41,7 @@ class logics:
 
 
     def analyze_user(self, json):
-        user_df = converter.converter.convert_to_user_df(json)
+        user_df = converter.Converter.convert_to_user_df(json)
 
         item_features_dict = {name: np.array(value) for name, value in user_df.items()}
 

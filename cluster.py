@@ -1,7 +1,7 @@
 from sklearn.cluster import KMeans
 import pickle
 
-class cluster:
+class Cluster:
     def __init__(self):
         with open('.\Models\km.pickle', 'rb') as f:
             self.kmeans = pickle.load(f)
