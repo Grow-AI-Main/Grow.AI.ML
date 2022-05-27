@@ -1,0 +1,136 @@
+{
+	"info": {
+		"_postman_id": "68a08ba5-3ce9-46e6-9ee6-7cc74cafe28a",
+		"name": "Grow.AI ML",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Resources",
+			"item": [
+				{
+					"name": "Titles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{address}}:105/resources/titles",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "105",
+							"path": [
+								"resources",
+								"titles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Degree Types",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{address}}:105/resources/degree/types",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "105",
+							"path": [
+								"resources",
+								"degree",
+								"types"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Degree Fields",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{address}}:105/resources/degree/fields",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "105",
+							"path": [
+								"resources",
+								"degree",
+								"fields"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Degree Institutions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{address}}:105/resources/degree/institutions",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "105",
+							"path": [
+								"resources",
+								"degree",
+								"institutions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ping",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Analyze",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"experiences\": [\r\n\t\t{\r\n\t\t\t\"jobTitle\": \"software engineer\",\r\n\t\t\t\"duration\": 5\r\n\t\t},\r\n\t\t{\r\n\t\t\t\"jobTitle\": \"software engineer\",\r\n\t\t\t\"duration\": 12\r\n\t\t},\r\n\t\t{\r\n\t\t\t\"jobTitle\": \"software engineer\",\r\n\t\t\t\"duration\": 10\r\n\t\t}\r\n\t],\r\n\t\"firstDegree\": {\r\n\t\t\"type\": \"B.Sc\",\r\n\t\t\"field\": \"computer science\",\r\n\t\t\"institutionName\": \"Tel Aviv University\"\r\n\t},\r\n\t\"secondDegree\": {\r\n\t\t\"type\": \"M.Sc\",\r\n\t\t\"field\": \"computer science\",\r\n\t\t\"institutionName\": \"Tel Aviv University\"\r\n\t}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{address}}:105/analyze",
+					"protocol": "http",
+					"host": [
+						"{{address}}"
+					],
+					"port": "105",
+					"path": [
+						"analyze"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
