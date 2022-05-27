@@ -30,7 +30,9 @@ class logics:
 
         predicts = self.cluster.predict(encoded_items)
 
-        for i in range(9):
+        number_of_clusters = self.cluster.number_of_clusters()
+
+        for i in range(number_of_clusters):
             self.clusters[i] = []
 
         for i in range(len(predicts)): 
