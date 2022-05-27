@@ -1,11 +1,9 @@
-from typing_extensions import Self
 import converter
 import keras_model
 import cluster
 import recommendation
+import data_frame_manager
 import numpy as np
-import pandas as pd
-import os
 
 class Logics:
     def __init__(self):
@@ -18,14 +16,10 @@ class Logics:
 
 
     def __load_clusters(self):
-        df = pd.read_csv(os.getcwd() + '/Data/relevant_filterd_Data.csv')
-        df.drop(['User Id'], axis=1, inplace=True)
-        df = df.fillna('')
-
-        items_features_dict = {name: np.array(value) for name, value in df.items()}
-
         # Save DataFrame to self
-        self.df = df
+        self.df = data_frame_manager.DataFrameManager().get_data_frame()
+
+        items_features_dict = {name: np.array(value) for name, value in self.df.items()}
 
         encoded_items = self.keras_model.preprocess_and_encode(items_features_dict)
 
