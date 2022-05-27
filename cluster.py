@@ -4,13 +4,13 @@ import pickle
 class cluster:
     def __init__(self):
         with open('.\Models\km.pickle', 'rb') as f:
-            self.km = pickle.load(f)
+            self.kmeans = pickle.load(f)
 
 
     def number_of_clusters(self):
-        return self.km.n_clusters
-        
+        return self.kmeans.n_clusters
+
     
     def predict(self, vec):
-        cluster = self.km.predict(vec)
+        cluster = self.kmeans.predict(vec)
         return cluster
