@@ -19,7 +19,7 @@ class logics:
 
 
     def __load_clusters(self):
-        df_path = os.getcwd() + '\Data\relevant_filterd_Data.csv'
+        df_path = os.getcwd() + '/Data/relevant_filterd_Data.csv'
         df = pd.read_csv(df_path)
         df.drop(['User Id'], axis=1, inplace=True)
         df = df.fillna('')
