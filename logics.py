@@ -1,6 +1,7 @@
+from argparse import ArgumentError
 import converter
 import keras_model
-import cluster
+import knn
 import recommendation
 import data_frame_manager
 import numpy as np
@@ -8,45 +9,50 @@ import numpy as np
 class Logics:
     def __init__(self):
         self.keras_model = keras_model.KerasModel()
-        self.cluster = cluster.Cluster()
+        self.KNN = knn.KNN()
         self.recommendation = recommendation.Recommendation()
-        self.clusters = {}
+        self.data_frame_manager = data_frame_manager.DataFrameManager()
+        self.supported_jobs = ['software development team lead']
+        self.encoded_items_dict = {}
 
-        self.__load_clusters()
+        self.__encode_items()
 
 
-    def __load_clusters(self):
-        # Save DataFrame to self
-        self.df = data_frame_manager.DataFrameManager().get_data_frame()
+    def __encode_items(self):
+        for supported_job in self.supported_jobs:
+            df = self.data_frame_manager.filter_data_frame_by_destination_job(supported_job)
 
-        items_features_dict = {name: np.array(value) for name, value in self.df.items()}
+            items_features_dict = {name: np.array(value) for name, value in df.items()}
 
-        encoded_items = self.keras_model.preprocess_and_encode(items_features_dict)
+            encoded_items = self.keras_model.preprocess_and_encode(items_features_dict)
 
-        predicts = self.cluster.predict(encoded_items)
-
-        number_of_clusters = self.cluster.number_of_clusters()
-
-        for i in range(number_of_clusters):
-            self.clusters[i] = []
-
-        for i in range(len(predicts)): 
-            self.clusters[predicts[i]].append(i)
+            self.encoded_items_dict[supported_job] = encoded_items
 
 
     def analyze_user(self, json):
+        destination_job = json['destination_job']
+
+        self.__verify_destination_job(destination_job)
+
         user_df = converter.Converter.convert_to_user_df(json)
 
-        item_features_dict = {name: np.array(value) for name, value in user_df.items()}
+        user_item_features_dict = {name: np.array(value) for name, value in user_df.items()}
 
-        encoded_item = self.keras_model.preprocess_and_encode(item_features_dict)
+        encoded_user_item = self.keras_model.preprocess_and_encode(user_item_features_dict)
 
-        cluster = self.cluster.predict(encoded_item)
+        encoded_items = self.encoded_items_dict[destination_job]
 
-        similar_users = self.df.iloc[self.clusters[cluster[0]]]
+        data_frame_by_destination_job = self.data_frame_manager.filter_data_frame_by_destination_job(destination_job)
+
+        neighbors_df = self.KNN.get_neighbors(encoded_items, encoded_user_item, data_frame_by_destination_job, 18)
 
         user_input = {name: value for name, value in user_df.iloc[0].items()}
 
-        recommend = self.recommendation.final_career_recommendation(similar_users, user_input)
+        recommend = self.recommendation.final_career_recommendation(neighbors_df, user_input)
 
         return recommend
+
+
+    def __verify_destination_job(self, destination_job):
+        if destination_job not in self.supported_jobs:
+            raise ArgumentError(f'Not supported destination job: {destination_job}')

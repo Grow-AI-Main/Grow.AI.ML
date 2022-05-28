@@ -6,7 +6,7 @@ from sqlalchemy import column
 
 class DataFrameManager:
     def __init__(self):
-        df = pd.read_csv(os.getcwd() + '/Data/relevant_filterd_Data.csv')
+        df = pd.read_csv(os.getcwd() + '/Data/data_custom_destination_job.csv')
         df.drop(['User Id'], axis=1, inplace=True)
         df = df.fillna('')
 
@@ -15,6 +15,13 @@ class DataFrameManager:
 
     def get_data_frame(self):
         return self.df
+
+
+    def filter_data_frame_by_destination_job(self, destination_job):
+        data_frame_by_destination_job = self.df[self.df['destination_job'] == destination_job]
+        data_frame_by_destination_job.reset_index(inplace=True)
+
+        return data_frame_by_destination_job
 
 
     def get_unique_titles(self):
