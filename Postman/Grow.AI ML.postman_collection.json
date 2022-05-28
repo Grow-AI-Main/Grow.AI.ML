@@ -111,7 +111,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"experiences\": [\r\n\t\t{\r\n\t\t\t\"jobTitle\": \"software engineer\",\r\n\t\t\t\"duration\": 5\r\n\t\t},\r\n\t\t{\r\n\t\t\t\"jobTitle\": \"software engineer\",\r\n\t\t\t\"duration\": 12\r\n\t\t},\r\n\t\t{\r\n\t\t\t\"jobTitle\": \"software engineer\",\r\n\t\t\t\"duration\": 10\r\n\t\t}\r\n\t],\r\n\t\"firstDegree\": {\r\n\t\t\"type\": \"B.Sc\",\r\n\t\t\"field\": \"computer science\",\r\n\t\t\"institutionName\": \"Tel Aviv University\"\r\n\t},\r\n\t\"secondDegree\": {\r\n\t\t\"type\": \"M.Sc\",\r\n\t\t\"field\": \"computer science\",\r\n\t\t\"institutionName\": \"Tel Aviv University\"\r\n\t}\r\n}",
+					"raw": "{\r\n\t\"experiences\": [\r\n\t\t{\r\n\t\t\t\"jobTitle\": \"software development\",\r\n\t\t\t\"duration\": 5\r\n\t\t},\r\n\t\t{\r\n\t\t\t\"jobTitle\": \"software development\",\r\n\t\t\t\"duration\": 12\r\n\t\t}\r\n\t],\r\n\t\"firstDegree\": {\r\n\t\t\"type\": \"B.Sc\",\r\n\t\t\"field\": \"Computer Science\",\r\n\t\t\"institutionName\": \"Tel Aviv University\"\r\n\t},\r\n\t\"secondDegree\": {\r\n\t\t\"type\": \"M.Sc\",\r\n\t\t\"field\": \"Computer Science\",\r\n\t\t\"institutionName\": \"Tel Aviv University\"\r\n\t},\r\n    \"destination_job\": \"software development team lead\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
