@@ -51,5 +51,15 @@ def degree_institutions():
     return jsonify(institutions=degree_institutions)
 
 
+@app.errorhandler(ValueError)          
+def value_error(e):          
+    return f'A value error occurred: {e}', 404
+
+
+@app.errorhandler(Exception) 
+def basic_error(e):      
+    return f'An exception occurred: {e}', 500
+
+
 if __name__ == '__main__':
     app.run(port=105)

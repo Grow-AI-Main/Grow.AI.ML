@@ -1,4 +1,3 @@
-from argparse import ArgumentError
 import converter
 import keras_model
 import knn
@@ -55,4 +54,4 @@ class Logics:
 
     def __verify_destination_job(self, destination_job):
         if destination_job not in self.supported_jobs:
-            raise ArgumentError(f'Not supported destination job: {destination_job}')
+            raise ValueError(f'Not supported destination job: {destination_job}')
