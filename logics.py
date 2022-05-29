@@ -13,6 +13,7 @@ class Logics:
         self.data_frame_manager = data_frame_manager.DataFrameManager()
         self.supported_jobs = self.data_frame_manager.get_unique_destination_jobs()
         self.encoded_items_dict = {}
+        self.K = 18
 
         self.__encode_items()
 
@@ -43,11 +44,11 @@ class Logics:
 
         data_frame_by_destination_job = self.data_frame_manager.filter_data_frame_by_destination_job(destination_job)
 
-        neighbors_df = self.KNN.get_neighbors(encoded_items, encoded_user_item, data_frame_by_destination_job, 18)
+        neighbors_df = self.KNN.get_neighbors(encoded_items, encoded_user_item, data_frame_by_destination_job, self.K)
 
         user_input = {name: value for name, value in user_df.iloc[0].items()}
 
-        recommend = self.recommendation.final_career_recommendation(neighbors_df, user_input)
+        recommend = self.recommendation.final_career_recommendation(neighbors_df, user_input, destination_job)
 
         return recommend
 
