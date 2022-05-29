@@ -9,6 +9,26 @@
 			"name": "Resources",
 			"item": [
 				{
+					"name": "Destination Jobs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{address}}:105/resources/destination_jobs",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "105",
+							"path": [
+								"resources",
+								"destination_jobs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Titles",
 					"request": {
 						"method": "GET",
@@ -99,7 +119,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": ""
+					"raw": "http://{{address}}:105/ping",
+					"protocol": "http",
+					"host": [
+						"{{address}}"
+					],
+					"port": "105",
+					"path": [
+						"ping"
+					]
 				}
 			},
 			"response": []
