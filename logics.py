@@ -11,7 +11,7 @@ class Logics:
         self.KNN = knn.KNN()
         self.recommendation = recommendation.Recommendation()
         self.data_frame_manager = data_frame_manager.DataFrameManager()
-        self.supported_jobs = ['software development team lead']
+        self.supported_jobs = self.data_frame_manager.get_unique_destination_jobs()
         self.encoded_items_dict = {}
 
         self.__encode_items()
