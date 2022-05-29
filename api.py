@@ -23,6 +23,13 @@ def analyze():
     return jsonify(analyzed_user_data), 200
 
 
+@app.route('/resources/destination_jobs', methods=['GET'])
+def destination_jobs():
+    destination_jobs = data_frame_manager.get_unique_destination_jobs()
+
+    return jsonify(destination_jobs=destination_jobs)
+
+
 @app.route('/resources/titles', methods=['GET'])
 def titles():
     titles = data_frame_manager.get_unique_titles()

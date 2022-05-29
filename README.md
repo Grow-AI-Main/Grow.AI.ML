@@ -12,6 +12,9 @@ The project contains 6 apis:
     Analyze user input.
     Returns user recommended carear path.
     
+  - /resources/destination_jobs ['GET']:
+    Returns all supported destination jobs.
+
   - /resources/titles ['GET']:
     Returns all supported titles.
     
