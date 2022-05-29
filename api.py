@@ -1,12 +1,14 @@
 import logics
 import data_frame_manager
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 
 
 logics = logics.Logics()
 data_frame_manager = data_frame_manager.DataFrameManager()
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route('/ping', methods=['GET', 'POST'])
@@ -63,10 +65,10 @@ def value_error(e):
     return f'A value error occurred: {e}', 404
 
 
-@app.errorhandler(Exception) 
+@app.errorhandler(Exception)
 def basic_error(e):      
     return f'An exception occurred: {e}', 500
 
 
 if __name__ == '__main__':
-    app.run(port=105)
+    app.run(port=8080)
