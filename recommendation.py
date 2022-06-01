@@ -6,12 +6,21 @@ import pandas as pd
 class Recommendation:
     # This function gets the dataframe of neighbours and a colum name
     # drops the rows where there's now values and finds the most common item in a colomn
+    # min_occurences_percentage - should be between 0 - 1
     # returns the name of the item as string
-    def __find_most_common_item_in_current_column(self, neighbours_df, column):
+    def __find_most_common_item_in_current_column(self, neighbours_df, column, min_occurences_percentage = 0):
+        df_len = len(neighbours_df)
+
         df_after_droping_naans = neighbours_df.drop(neighbours_df[neighbours_df[column] == ''].index)
         column_list = df_after_droping_naans[column].tolist()
         most_common_item = max(column_list, key=column_list.count)
-        return most_common_item
+
+        counter = Counter(column_list)
+
+        if counter[most_common_item] >= min_occurences_percentage * df_len:
+            return most_common_item
+
+        return ''
 
 
     # this function gets the neighbours dataframe and a column name
@@ -48,22 +57,23 @@ class Recommendation:
     # find the most common items in each job column and the average duration of each job
     # returns a recommedation dictionairy as if the user did not work in anything
     def __create_recommended_job_dict(self, neiboughrs_df):
-        jobs = []
-        durations = []
         recommended_jobs_and_durations = dict()
         num_of_job_columns = 8
 
         for column in range(1, num_of_job_columns + 1):
             comon_job_per_column = self.__find_most_common_item_in_current_column(neiboughrs_df,
-                                                                           f'Experience {column} Job Title')
-            jobs.append(comon_job_per_column)
-            avg_duration_per_job = self.__find_average_duration_of_common_job(neiboughrs_df, f'Experience {column} Job Title',
-                                                                       f'Experience {column} Duration',
-                                                                       comon_job_per_column)
-            durations.append(avg_duration_per_job)
+                                                                           f'Experience {column} Job Title',
+                                                                           0.15)
 
-        for column in range(0, num_of_job_columns):
-            recommended_jobs_and_durations.update({f"Recommended job {column + 1}": (jobs[column], durations[column])})
+            if comon_job_per_column != '':                
+                avg_duration_per_job = self.__find_average_duration_of_common_job(neiboughrs_df, f'Experience {column} Job Title',
+                                                                        f'Experience {column} Duration',
+                                                                        comon_job_per_column)
+                
+                recommended_jobs_and_durations.update({f"Recommended job {column}": (comon_job_per_column, avg_duration_per_job)})
+
+            else:
+                recommended_jobs_and_durations.update({f"Recommended job {column}": ('', 0)})
 
         return recommended_jobs_and_durations
 
@@ -79,22 +89,23 @@ class Recommendation:
         # find the most common items in the field, type and top 3 in the instituion columns
         recommended_first_degree_level = self.__find_most_common_item_in_current_column(neighbours_df, 'First Degree')
         recommended_second_degree_level = self.__find_most_common_item_in_current_column(neighbours_df, 'Second Degree')
-        recommended_first_degree_field = self.__find_most_common_item_in_current_column(neighbours_df, 'First Degree Field')
-        recommended_second_degree_field = self.__find_most_common_item_in_current_column(neighbours_df, 'Second Degree Field')
+        recommended_first_degree_field = self.__find_most_common_item_in_current_column(neighbours_df, 'First Degree Field', 0.3)
+        recommended_second_degree_field = self.__find_most_common_item_in_current_column(neighbours_df, 'Second Degree Field', 0.3)
         recommended_first_degree_institution = self.__find_three_most_common_items_in_current_column(neighbours_df,
                                                                                               'First Degree Institution Name')
         recommended_Second_degree_institution = self.__find_three_most_common_items_in_current_column(neighbours_df,
                                                                                                'Second Degree Institution Name')
 
         # create two dictionaries with the recommended educations
-        recommended_first_degree.update({"Recommended First Degree Level": recommended_first_degree_level})
-        recommended_first_degree.update({"Recommended First Degree Field": recommended_first_degree_field})
-        recommended_first_degree.update(
-            {"Recommended top 3 First Degree Instituions": recommended_first_degree_institution})
-        recommended_second_degree.update({"Recommended Second Degree Level": recommended_second_degree_level})
-        recommended_second_degree.update({"Recommended Second Degree Field": recommended_second_degree_field})
-        recommended_second_degree.update(
-            {"Recommended top 3 Second Degree Instituions": recommended_Second_degree_institution})
+        if recommended_first_degree_field != '':
+            recommended_first_degree.update({"Recommended First Degree Level": recommended_first_degree_level})
+            recommended_first_degree.update({"Recommended First Degree Field": recommended_first_degree_field})
+            recommended_first_degree.update({"Recommended top 3 First Degree Instituions": recommended_first_degree_institution})
+
+        if recommended_second_degree_field != '':
+            recommended_second_degree.update({"Recommended Second Degree Level": recommended_second_degree_level})
+            recommended_second_degree.update({"Recommended Second Degree Field": recommended_second_degree_field})
+            recommended_second_degree.update({"Recommended top 3 Second Degree Instituions": recommended_Second_degree_institution})
 
         return recommended_first_degree, recommended_second_degree
 
@@ -108,14 +119,15 @@ class Recommendation:
         keys_to_delete_second_degree = []
         users_first_degree_field = user_input['First Degree Field']
         users_second_degree_field = user_input['Second Degree Field']
-        users_first_degree_institution = user_input['First Degree Institution Name']
-        users_second_degree_institution = user_input['Second Degree Institution Name']
-        recommended_first_degree_field = recommended_first_degree['Recommended First Degree Field']
-        recommended_second_degree_field = recommended_second_degree['Recommended Second Degree Field']
-        recommended_first_degree_top_three_institutions = recommended_first_degree[
-            'Recommended top 3 First Degree Instituions']
-        recommended_second_degree_top_three_institutions = recommended_second_degree[
-            'Recommended top 3 Second Degree Instituions']
+        recommended_first_degree_field = ''
+        recommended_second_degree_field = ''
+
+        # init recommended degrees fields
+        if recommended_first_degree:
+            recommended_first_degree_field = recommended_first_degree['Recommended First Degree Field']
+
+        if recommended_second_degree:
+            recommended_second_degree_field = recommended_second_degree['Recommended Second Degree Field']
 
         # in the case below - is when a person have studied the same degree as their allocated cluster - in one of three top places
         if users_first_degree_field == recommended_first_degree_field:
@@ -143,7 +155,6 @@ class Recommendation:
     # for example - if the general recommendation is to do 3 software jobs, and the user have done 1, it will recommend 2 jobs (what's left)
     # returns the final job recommendation
     def __find_accomplished_job_items(self, user_input, recommended_job_dict_before_user):
-
         indices_to_delete_in_general_recommendation = set()
         indices_to_delete_in_user_input = set()
         num_of_job_columns = 8
