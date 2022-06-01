@@ -14,12 +14,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{address}}:105/resources/destination_jobs",
+							"raw": "http://{{address}}:{{port}}/resources/destination_jobs",
 							"protocol": "http",
 							"host": [
 								"{{address}}"
 							],
-							"port": "105",
+							"port": "{{port}}",
 							"path": [
 								"resources",
 								"destination_jobs"
@@ -34,12 +34,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{address}}:105/resources/titles",
+							"raw": "http://{{address}}:{{port}}/resources/titles",
 							"protocol": "http",
 							"host": [
 								"{{address}}"
 							],
-							"port": "105",
+							"port": "{{port}}",
 							"path": [
 								"resources",
 								"titles"
@@ -54,12 +54,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{address}}:105/resources/degree/types",
+							"raw": "http://{{address}}:{{port}}/resources/degree/types",
 							"protocol": "http",
 							"host": [
 								"{{address}}"
 							],
-							"port": "105",
+							"port": "{{port}}",
 							"path": [
 								"resources",
 								"degree",
@@ -75,12 +75,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{address}}:105/resources/degree/fields",
+							"raw": "http://{{address}}:{{port}}/resources/degree/fields",
 							"protocol": "http",
 							"host": [
 								"{{address}}"
 							],
-							"port": "105",
+							"port": "{{port}}",
 							"path": [
 								"resources",
 								"degree",
@@ -96,16 +96,61 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{address}}:105/resources/degree/institutions",
+							"raw": "http://{{address}}:{{port}}/resources/degree/institutions",
 							"protocol": "http",
 							"host": [
 								"{{address}}"
 							],
-							"port": "105",
+							"port": "{{port}}",
 							"path": [
 								"resources",
 								"degree",
 								"institutions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filter Degree Fields",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{address}}:{{port}}/resources/degree/filter/B.Sc.",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"resources",
+								"degree",
+								"filter",
+								"B.Sc."
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filter Degree Institutions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{address}}:{{port}}/resources/degree/filter/B.Sc./computer science",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"resources",
+								"degree",
+								"filter",
+								"B.Sc.",
+								"computer science"
 							]
 						}
 					},
@@ -119,12 +164,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://{{address}}:105/ping",
+					"raw": "http://{{address}}:{{port}}/ping",
 					"protocol": "http",
 					"host": [
 						"{{address}}"
 					],
-					"port": "105",
+					"port": "{{port}}",
 					"path": [
 						"ping"
 					]
@@ -147,12 +192,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://{{address}}:105/analyze",
+					"raw": "http://{{address}}:{{port}}/analyze",
 					"protocol": "http",
 					"host": [
 						"{{address}}"
 					],
-					"port": "105",
+					"port": "{{port}}",
 					"path": [
 						"analyze"
 					]
