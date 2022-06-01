@@ -47,7 +47,7 @@ class Logics:
 
         user_input = {name: value for name, value in user_df.iloc[0].items()}
 
-        recommend = self.recommendation.final_career_recommendation(neighbors_df, user_input)
+        recommend = self.recommendation.final_career_recommendation(neighbors_df, user_input, destination_job)
 
         return recommend
 

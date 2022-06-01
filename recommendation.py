@@ -4,19 +4,15 @@ import pandas as pd
 
 
 class Recommendation:
-
-    def __dict_to_df(self, user_input_dict):
-        user_input_df_new = pd.DataFrame.from_dict(user_input_dict)
-        return user_input_df_new
-
     # This function gets the dataframe of neighbours and a colum name
     # drops the rows where there's now values and finds the most common item in a colomn
     # returns the name of the item as string
-    def __find_most_common_itme_in_current_column(neighbours_df, column):
+    def __find_most_common_itme_in_current_column(self, neighbours_df, column):
         df_after_droping_naans = neighbours_df.drop(neighbours_df[neighbours_df[column] == ''].index)
         column_list = df_after_droping_naans[column].tolist()
         most_common_item = max(column_list, key=column_list.count)
         return most_common_item
+
 
     # this function gets the neighbours dataframe and a column name
     # and finds the most common 3 items
@@ -34,6 +30,7 @@ class Recommendation:
 
         return top_three_colleges
 
+
     # This function gets the K nearest neighbours dataframe, a job title column and job duration coloumn and the most common item in the
     # job title column
     # it finds the average duration of the most common job in the job column
@@ -45,6 +42,7 @@ class Recommendation:
         column_average = mean(durations)
         rounded_average = round(column_average)
         return rounded_average
+
 
     # this function gets the k nearest neighbours dataframe
     # find the most common items in each job column and the average duration of each job
@@ -66,7 +64,9 @@ class Recommendation:
 
         for column in range(0, num_of_job_columns):
             recommended_jobs_and_durations.update({f"Recommended job {column + 1}": (jobs[column], durations[column])})
+
         return recommended_jobs_and_durations
+
 
     # This function gets the k nearest neighbours dataframe
     # finds the most common item in the degree feild & degree type columns
@@ -95,19 +95,21 @@ class Recommendation:
         recommended_second_degree.update({"Recommended Second Degree Field": recommended_second_degree_field})
         recommended_second_degree.update(
             {"Recommended top 3 Second Degree Instituions": recommended_Second_degree_institution})
+
         return recommended_first_degree, recommended_second_degree
+
 
     # this function gets the k nearest neighbours dataframe, the recommended first and second degree
     # as if the user did not study anything yet
     # it comapares the general education recommendation to what the user have already studied
     # and returns the recommendation after taking out what the user have already studied - of the first and second degrees
-    def __find_accomplished_education_items(self,user_input_df, recommended_first_degree, recommended_second_degree):
+    def __find_accomplished_education_items(self, user_input, recommended_first_degree, recommended_second_degree):
         keys_to_delete_first_degree = []
         keys_to_delete_second_degree = []
-        users_first_degree_field = user_input_df['First Degree Field'][0]
-        users_second_degree_field = user_input_df['Second Degree Field'][0]
-        users_first_degree_institution = user_input_df['First Degree Institution Name'][0]
-        users_second_degree_institution = user_input_df['Second Degree Institution Name'][0]
+        users_first_degree_field = user_input['First Degree Field']
+        users_second_degree_field = user_input['Second Degree Field']
+        users_first_degree_institution = user_input['First Degree Institution Name']
+        users_second_degree_institution = user_input['Second Degree Institution Name']
         recommended_first_degree_field = recommended_first_degree['Recommended First Degree Field']
         recommended_second_degree_field = recommended_second_degree['Recommended Second Degree Field']
         recommended_first_degree_top_three_institutions = recommended_first_degree[
@@ -136,22 +138,22 @@ class Recommendation:
 
         return recommended_first_degree, recommended_second_degree
 
+
     # this function gets the k nearest neighbours df and the recommneded jobs and durations
     # as if the user had never worked
     # it finds the jobs the user had already done and gets them off the recommendation
     # for example - if the general recommendation is to do 3 software jobs, and the user have done 1, it will recommend 2 jobs (what's left)
     # returns the final job recommendation
-    def __find_accomplished_job_items(self, user_input_df, recommended_job_dict_before_user):
+    def __find_accomplished_job_items(self, user_input, recommended_job_dict_before_user):
 
         indices_to_delete_in_general_recommendation = set()
         indices_to_delete_in_user_input = set()
         num_of_job_columns = 8
 
-        for i in range(1, num_of_job_columns + 1):
+        for i in range(3, num_of_job_columns + 1):
             for j in range(1, num_of_job_columns + 1):
                 # if the user does a job that exists in any of the existing recommendation columns
-                if user_input_df[f'Experience {i} Job Title'][0] == \
-                        recommended_job_dict_before_user[f'Recommended job {j}'][0]:
+                if (user_input[f'Experience {i} Job Title'] == recommended_job_dict_before_user[f'Recommended job {j}'][0]):
                     # add the relevant index to delete later in the general recommendation
                     indices_to_delete_in_general_recommendation.add(j)
                     indices_to_delete_in_user_input.add(i)
@@ -170,6 +172,7 @@ class Recommendation:
             del recommended_job_dict_before_user[f'Recommended job {k}']
 
         return recommended_job_dict_before_user
+
 
     # this function gets the job & education recommendations after cutting what the user have already achieved
     # cuts the job & duration recommendation after the user have achvied their dream job
@@ -199,10 +202,11 @@ class Recommendation:
             jobs_recommendation_after_user_jobs[i][1][0], jobs_recommendation_after_user_jobs[i][1][1])})
         return final_job_recommendation
 
+
     # this function gets the final education & job recommendations (the job recommendation after achieving the dream job)
     # it turns all these into one json in order to send it to the client
     # return an organized json
-    def __make_recommendation_json(self,first_deg_education_recommendation, second_deg_education_recommedation,
+    def __make_recommendation_json(self, first_deg_education_recommendation, second_deg_education_recommedation,
                                  job_rec_after_achieving_detination_job):
 
         recommendation = dict()
@@ -225,6 +229,7 @@ class Recommendation:
                 'field': second_deg_education_recommedation['Recommended Second Degree Field'],
                 'institutionName': second_deg_education_recommedation['Recommended top 3 Second Degree Instituions']
             }
+
         # if the job recommendation is not empty
         if job_rec_after_achieving_detination_job:
             # turn the job dict into list so it will be iterable
@@ -256,29 +261,25 @@ class Recommendation:
             }
         return recommendation
 
+
     # this is the final function that activates all the functions
     # only need to call this function
     # it gets the k nearest neigbouts dataframe, the user input and the user destination job
     # and returns the final recommendation json
-
-
-    def final_career_recommendation_json(self, neighbours_df, user_input_dict, user_destination_job):
-        # turn the user input input from json to dataframe
-        user_input_df = self.__dict_to_df(user_input_dict)
-
+    def final_career_recommendation(self, neighbours_df, user_input_dict, user_destination_job):
         # get the general first & second degree recommendations - as if the user studied nothing
-        recommended_first_degree_general, recommended_second_degree_general = self.__find_most_common_itme_in_current_column(neighbours_df)
+        recommended_first_degree_general, recommended_second_degree_general = self.__create_recommended_education_dict(neighbours_df)
 
         # get the general job title & duration recommendation - as if the user worked at nothing
         recommended_job_list_dict_before_user = self.__create_recommended_job_dict(neighbours_df)
 
         # get the first & second degree recommendation after cutting what the user has already studied
-        first_deg_education_after_user, second_deg_education_after_user = self.__find_accomplished_education_items(user_input_df,
+        first_deg_education_after_user, second_deg_education_after_user = self.__find_accomplished_education_items(user_input_dict,
                                                                                                             recommended_first_degree_general,
                                                                                                             recommended_second_degree_general)
 
         # get the job title & duration recommendation after cutting what the user have already worked at
-        job_recommendation_after_user = self.__find_accomplished_job_items(user_input_df, recommended_job_list_dict_before_user)
+        job_recommendation_after_user = self.__find_accomplished_job_items(user_input_dict, recommended_job_list_dict_before_user)
 
         # get the job title & duration recommendation after cutting what's after the user have achived their dream job
         final_job_recommendation = self.__remove_jobs_after_dream_job(job_recommendation_after_user, user_destination_job)
