@@ -1,7 +1,5 @@
-import numpy as np
 from collections import Counter
 from statistics import mean
-import json
 import pandas as pd
 
 
