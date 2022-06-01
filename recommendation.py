@@ -7,7 +7,7 @@ class Recommendation:
     # This function gets the dataframe of neighbours and a colum name
     # drops the rows where there's now values and finds the most common item in a colomn
     # returns the name of the item as string
-    def __find_most_common_itme_in_current_column(self, neighbours_df, column):
+    def __find_most_common_item_in_current_column(self, neighbours_df, column):
         df_after_droping_naans = neighbours_df.drop(neighbours_df[neighbours_df[column] == ''].index)
         column_list = df_after_droping_naans[column].tolist()
         most_common_item = max(column_list, key=column_list.count)
@@ -54,7 +54,7 @@ class Recommendation:
         num_of_job_columns = 8
 
         for column in range(1, num_of_job_columns + 1):
-            comon_job_per_column = self.__find_most_common_itme_in_current_column(neiboughrs_df,
+            comon_job_per_column = self.__find_most_common_item_in_current_column(neiboughrs_df,
                                                                            f'Experience {column} Job Title')
             jobs.append(comon_job_per_column)
             avg_duration_per_job = self.__find_average_duration_of_common_job(neiboughrs_df, f'Experience {column} Job Title',
@@ -77,11 +77,11 @@ class Recommendation:
         recommended_second_degree = dict()
 
         # find the most common items in the field, type and top 3 in the instituion columns
-        recommended_first_degree_level = self.__find_most_common_itme_in_current_column(neighbours_df, 'First Degree')
-        recommended_second_degree_level = self.__find_most_common_itme_in_current_column(neighbours_df, 'Second Degree')
-        recommended_first_degree_field = self.__find_most_common_itme_in_current_column(neighbours_df, 'First Degree Field')
-        recommended_second_degree_field = self.__find_most_common_itme_in_current_column(neighbours_df, 'Second Degree Field')
-        recommended_first_degree_institution = self.__find_most_common_itme_in_current_column(neighbours_df,
+        recommended_first_degree_level = self.__find_most_common_item_in_current_column(neighbours_df, 'First Degree')
+        recommended_second_degree_level = self.__find_most_common_item_in_current_column(neighbours_df, 'Second Degree')
+        recommended_first_degree_field = self.__find_most_common_item_in_current_column(neighbours_df, 'First Degree Field')
+        recommended_second_degree_field = self.__find_most_common_item_in_current_column(neighbours_df, 'Second Degree Field')
+        recommended_first_degree_institution = self.__find_three_most_common_items_in_current_column(neighbours_df,
                                                                                               'First Degree Institution Name')
         recommended_Second_degree_institution = self.__find_three_most_common_items_in_current_column(neighbours_df,
                                                                                                'Second Degree Institution Name')
@@ -118,15 +118,13 @@ class Recommendation:
             'Recommended top 3 Second Degree Instituions']
 
         # in the case below - is when a person have studied the same degree as their allocated cluster - in one of three top places
-        if ((users_first_degree_field == recommended_first_degree_field) &
-                (users_first_degree_institution in recommended_first_degree_top_three_institutions)):
+        if users_first_degree_field == recommended_first_degree_field:
             keys_to_delete_first_degree = ["Recommended First Degree Field", "Recommended First Degree Level",
                                            "Recommended top 3 First Degree Instituions"]
         # take all theses out in varibales - explample - user degree
 
         # in the case below - the same goes for a second degree
-        if ((users_second_degree_field == recommended_second_degree_field) &
-                (users_second_degree_institution in recommended_second_degree_top_three_institutions)):
+        if users_second_degree_field == recommended_second_degree_field:
             keys_to_delete_second_degree = ["Recommended Second Degree Level", "Recommended First Degree Field",
                                             "Recommended top 3 Second Degree Instituions"]
 
@@ -150,7 +148,7 @@ class Recommendation:
         indices_to_delete_in_user_input = set()
         num_of_job_columns = 8
 
-        for i in range(3, num_of_job_columns + 1):
+        for i in range(1, num_of_job_columns + 1):
             for j in range(1, num_of_job_columns + 1):
                 # if the user does a job that exists in any of the existing recommendation columns
                 if (user_input[f'Experience {i} Job Title'] == recommended_job_dict_before_user[f'Recommended job {j}'][0]):
@@ -166,7 +164,7 @@ class Recommendation:
 
         indices_to_delete = list()
         for i in range(0, len(index_to_delete_in_user_list)):
-            indices_to_delete.append(index_to_delete_in_general_recommendation_list[-i - 1])
+            indices_to_delete.append(index_to_delete_in_general_recommendation_list[i])
 
         for k in indices_to_delete:
             del recommended_job_dict_before_user[f'Recommended job {k}']
@@ -212,7 +210,6 @@ class Recommendation:
         recommendation = dict()
         firstDegree = dict()
         secondDegree = dict()
-        jobs = dict()
 
         # if the first degree recommendation is not empty
         if first_deg_education_recommendation:
@@ -242,23 +239,11 @@ class Recommendation:
                 }
                 job_dict.append(job)
 
-        # if there's no recommedation - don't add it
-        # if there's only a second degree recommedation - add it only
-        if firstDegree:
-            recommendation = {
-                'experiences': job_dict,
-                'first education recommendation': firstDegree,
-                'second education recommendation': secondDegree
-            }
-        if not firstDegree:
-            recommendation = {
-                'experiences': job_dict,
-                'first education recommendation': secondDegree
-            }
-        if not firstDegree and not secondDegree:
-            recommendation = {
-                'experiences': job_dict
-            }
+        recommendation = {
+            'experiences': job_dict,
+            'firstDegreeRecommendation': firstDegree,
+            'secondDegreeRecommendation': secondDegree
+        }
         return recommendation
 
 
