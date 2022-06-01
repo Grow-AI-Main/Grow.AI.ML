@@ -176,12 +176,11 @@ class Recommendation:
     # this function gets the job & education recommendations after cutting what the user have already achieved
     # cuts the job & duration recommendation after the user have achvied their dream job
     # returns the final job recommedation that ends witht with the dream job
-    def __cut_recommendation_after_dream_job(self, job_recommendation_after_user, user_destination_job):
+    def __remove_jobs_after_dream_job(self, job_recommendation_after_user, user_destination_job):
         jobs_recommendation_after_user_jobs = list()
         jobs_recommendation_after_user_jobs = list(job_recommendation_after_user.items())
         num_of_jobs_after_user_jobs = len(jobs_recommendation_after_user_jobs)
         delete_from_here = 0
-        flag = 0
 
         for i in range(0, num_of_jobs_after_user_jobs):
             # if the current job title is the user's destination job
@@ -191,7 +190,7 @@ class Recommendation:
                 flag = 1
                 break
 
-        if (flag == 1):
+        if (delete_from_here != 0):
             # delete all the job recommendations after acheiving the dream job
             del jobs_recommendation_after_user_jobs[delete_from_here:num_of_jobs_after_user_jobs]
 
@@ -270,21 +269,21 @@ class Recommendation:
         user_input_df = self.__dict_to_df(user_input_dict)
 
         # get the general first & second degree recommendations - as if the user studied nothing
-        recommended_first_degree, recommended_second_degree = self.__find_most_common_itme_in_current_column(neighbours_df)
+        recommended_first_degree_general, recommended_second_degree_general = self.__find_most_common_itme_in_current_column(neighbours_df)
 
         # get the general job title & duration recommendation - as if the user worked at nothing
         recommended_job_list_dict_before_user = self.__create_recommended_job_dict(neighbours_df)
 
         # get the first & second degree recommendation after cutting what the user has already studied
         first_deg_education_after_user, second_deg_education_after_user = self.__find_accomplished_education_items(user_input_df,
-                                                                                                            recommended_first_degree,
-                                                                                                            recommended_second_degree)
+                                                                                                            recommended_first_degree_general,
+                                                                                                            recommended_second_degree_general)
 
         # get the job title & duration recommendation after cutting what the user have already worked at
         job_recommendation_after_user = self.__find_accomplished_job_items(user_input_df, recommended_job_list_dict_before_user)
 
         # get the job title & duration recommendation after cutting what's after the user have achived their dream job
-        final_job_recommendation = self.__cut_recommendation_after_dream_job(job_recommendation_after_user, user_destination_job)
+        final_job_recommendation = self.__remove_jobs_after_dream_job(job_recommendation_after_user, user_destination_job)
 
         # get a json with the job & education recommendations combined
         final_career_recommendation = self.__make_recommendation_json(first_deg_education_after_user,
