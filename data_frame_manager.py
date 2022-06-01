@@ -28,6 +28,7 @@ class DataFrameManager:
 
         destination_jobs_list = list(destination_jobs)
         destination_jobs_list.remove('')
+        destination_jobs_list.sort()
 
         return destination_jobs_list
 
@@ -42,6 +43,7 @@ class DataFrameManager:
         
         titles_list = list(titles)
         titles_list.remove('')
+        titles_list.sort()
 
         return titles_list
 
@@ -51,6 +53,7 @@ class DataFrameManager:
 
         degree_types_list = list(degree_types)
         degree_types_list.remove('')
+        degree_types_list.sort()
 
         return degree_types_list
 
@@ -60,6 +63,7 @@ class DataFrameManager:
 
         degree_fields_list = list(degree_fields)
         degree_fields_list.remove('')
+        degree_fields_list.sort()
 
         return degree_fields_list
 
@@ -69,5 +73,30 @@ class DataFrameManager:
 
         degree_institutions_list = list(degree_institutions)
         degree_institutions_list.remove('')
+        degree_institutions_list.sort()
+
+        return degree_institutions_list
+
+
+    def get_unique_degree_fields_by_degree_type(self, degree_type):
+        filtered_df_by_degree_type = self.df[(self.df['First Degree'] == degree_type) | (self.df['Second Degree'] == degree_type)]
+        degree_fields = pd.unique(filtered_df_by_degree_type[['First Degree Field', 'Second Degree Field']].values.ravel('K'))
+
+        degree_fields_list = list(degree_fields)
+        degree_fields_list.remove('')
+        degree_fields_list.sort()
+
+        return degree_fields_list
+
+
+    def get_unique_degree_institutions_by_degree_type_and_degree_field(self, degree_type, degree_field):
+        filtered_df_by_degree_type = self.df[(self.df['First Degree'] == degree_type) | (self.df['Second Degree'] == degree_type)]
+        filtered_df_by_degree_type_and_degree_field = filtered_df_by_degree_type[(filtered_df_by_degree_type['First Degree Field'] == degree_field) | (filtered_df_by_degree_type['Second Degree Field'] == degree_field)]
+
+        degree_institutions = pd.unique(filtered_df_by_degree_type_and_degree_field[['First Degree Institution Name', 'Second Degree Institution Name']].values.ravel('K'))
+
+        degree_institutions_list = list(degree_institutions)
+        degree_institutions_list.remove('')
+        degree_institutions_list.sort()
 
         return degree_institutions_list

@@ -60,7 +60,21 @@ def degree_institutions():
     return jsonify(institutions=degree_institutions)
 
 
-@app.errorhandler(ValueError)          
+@app.route('/resources/degree/filter/<string:degree_type>', methods=['GET'])
+def filter_degree_types(degree_type):
+    degree_fields = data_frame_manager.get_unique_degree_fields_by_degree_type(degree_type)
+
+    return jsonify(fields=degree_fields)
+
+
+@app.route('/resources/degree/filter/<string:degree_type>/<string:degree_field>', methods=['GET'])
+def filter_degree_institutions(degree_type, degree_field):
+    degree_institutions = data_frame_manager.get_unique_degree_institutions_by_degree_type_and_degree_field(degree_type, degree_field)
+
+    return jsonify(institutions=degree_institutions)
+
+
+@app.errorhandler(ValueError)
 def value_error(e):          
     return f'A value error occurred: {e}', 404
 
