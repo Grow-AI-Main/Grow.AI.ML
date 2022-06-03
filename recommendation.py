@@ -1,6 +1,5 @@
 from collections import Counter
 from statistics import mean
-import pandas as pd
 
 
 class Recommendation:

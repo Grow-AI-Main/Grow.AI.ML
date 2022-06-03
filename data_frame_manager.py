@@ -1,7 +1,6 @@
 import pandas as pd
 import os
 
-from sqlalchemy import column
 
 class DataFrameManager:
     def __init__(self):
