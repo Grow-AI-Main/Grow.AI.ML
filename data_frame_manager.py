@@ -4,8 +4,8 @@ import os
 
 class DataFrameManager:
     def __init__(self):
-        df = pd.read_csv(os.getcwd() + '/Data/data_custom_destination_job.csv')
-        df.drop(['User Id'], axis=1, inplace=True)
+        df = pd.read_csv(os.getcwd() + '/Data/data.csv')
+        df.drop(['User Id', 'index'], axis=1, inplace=True)
         df = df.fillna('')
 
         self.df = df
@@ -26,7 +26,10 @@ class DataFrameManager:
         destination_jobs = pd.unique(self.df['destination_job'].values.ravel('K'))
 
         destination_jobs_list = list(destination_jobs)
-        destination_jobs_list.remove('')
+
+        if '' in destination_jobs_list:
+            destination_jobs_list.remove('')
+            
         destination_jobs_list.sort()
 
         return destination_jobs_list
