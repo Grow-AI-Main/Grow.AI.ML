@@ -139,11 +139,13 @@ class Recommendation:
             keys_to_delete_second_degree = ["Recommended Second Degree Level", "Recommended First Degree Field",
                                             "Recommended top 3 Second Degree Instituions"]
 
-        for key in keys_to_delete_first_degree:
-            del recommended_first_degree[key]
+        if recommended_first_degree:
+            for key in keys_to_delete_first_degree:
+                del recommended_first_degree[key]
 
-        for key in keys_to_delete_second_degree:
-            del recommended_second_degree[key]
+        if recommended_second_degree:
+            for key in keys_to_delete_second_degree:
+                del recommended_second_degree[key]
 
         return recommended_first_degree, recommended_second_degree
 

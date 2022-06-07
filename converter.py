@@ -16,7 +16,7 @@ class Converter:
                 data[f'Experience {i} Job Title'] = ['']
                 data[f'Experience {i} Duration'] = [0]
 
-        if json['firstDegree'] != NaN:
+        if 'firstDegree' in json:
             data['First Degree'] = [json['firstDegree']['type']]
             data['First Degree Field'] = [json['firstDegree']['field']]
             data['First Degree Institution Name'] = [json['firstDegree']['institutionName']]
@@ -26,7 +26,7 @@ class Converter:
             data['First Degree Field'] = ['']
             data['First Degree Institution Name'] = ['']
 
-        if json['secondDegree'] != NaN:
+        if 'secondDegree' in json:
             data['Second Degree'] = [json['secondDegree']['type']]
             data['Second Degree Field'] = [json['secondDegree']['field']]
             data['Second Degree Institution Name'] = [json['secondDegree']['institutionName']]
