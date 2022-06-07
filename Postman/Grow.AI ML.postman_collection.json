@@ -139,7 +139,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{address}}:{{port}}/resources/degree/filter/B.Sc./computer science",
+							"raw": "http://{{address}}:{{port}}/resources/degree/filter/B.Sc./Computer Science",
 							"protocol": "http",
 							"host": [
 								"{{address}}"
@@ -150,7 +150,7 @@
 								"degree",
 								"filter",
 								"B.Sc.",
-								"computer science"
+								"Computer Science"
 							]
 						}
 					},
@@ -184,7 +184,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"experiences\": [\r\n\t\t{\r\n\t\t\t\"jobTitle\": \"software development\",\r\n\t\t\t\"duration\": 5\r\n\t\t},\r\n\t\t{\r\n\t\t\t\"jobTitle\": \"software development\",\r\n\t\t\t\"duration\": 12\r\n\t\t}\r\n\t],\r\n\t\"firstDegree\": {\r\n\t\t\"type\": \"B.Sc\",\r\n\t\t\"field\": \"Computer Science\",\r\n\t\t\"institutionName\": \"Tel Aviv University\"\r\n\t},\r\n\t\"secondDegree\": {\r\n\t\t\"type\": \"M.Sc\",\r\n\t\t\"field\": \"Computer Science\",\r\n\t\t\"institutionName\": \"Tel Aviv University\"\r\n\t},\r\n    \"destination_job\": \"software development team lead\"\r\n}",
+					"raw": "{\r\n\t\"experiences\": [\r\n\t\t{\r\n\t\t\t\"jobTitle\": \"Software Developer\",\r\n\t\t\t\"duration\": 5\r\n\t\t},\r\n\t\t{\r\n\t\t\t\"jobTitle\": \"Software Developer\",\r\n\t\t\t\"duration\": 12\r\n\t\t}\r\n\t],\r\n\t\"firstDegree\": {\r\n\t\t\"type\": \"B.Sc\",\r\n\t\t\"field\": \"Computer Science\",\r\n\t\t\"institutionName\": \"Technion - Israel Institute Of Technology\"\r\n\t},\r\n\t\"secondDegree\": {\r\n\t\t\"type\": \"M.Sc\",\r\n\t\t\"field\": \"Computer Science\",\r\n\t\t\"institutionName\": \"Technion - Israel Institute Of Technology\"\r\n\t},\r\n    \"destination_job\": \"Software Developer Team Lead\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
