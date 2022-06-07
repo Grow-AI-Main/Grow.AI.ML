@@ -36,9 +36,11 @@ class Recommendation:
             colums_of_df = df_after_droping_naans[column].tolist()
             most_common_three_items_in_column = Counter(colums_of_df)
             college_name_and_num_of_appearnces = most_common_three_items_in_column.most_common(3)
-            top_three_colleges.append(college_name_and_num_of_appearnces[0][0])
-            top_three_colleges.append(college_name_and_num_of_appearnces[1][0])
-            top_three_colleges.append(college_name_and_num_of_appearnces[2][0])
+            college_names = list(zip(*college_name_and_num_of_appearnces))[0]
+
+            for i, college_name in enumerate(college_names):
+                if i < 3:
+                    top_three_colleges.append(college_name)
 
         return top_three_colleges
 
@@ -92,12 +94,12 @@ class Recommendation:
         # find the most common items in the field, type and top 3 in the instituion columns
         recommended_first_degree_level = self.__find_most_common_item_in_current_column(neighbours_df, 'First Degree')
         recommended_second_degree_level = self.__find_most_common_item_in_current_column(neighbours_df, 'Second Degree')
+
         recommended_first_degree_field = self.__find_most_common_item_in_current_column(neighbours_df, 'First Degree Field', 0.3)
         recommended_second_degree_field = self.__find_most_common_item_in_current_column(neighbours_df, 'Second Degree Field', 0.3)
-        recommended_first_degree_institution = self.__find_three_most_common_items_in_current_column(neighbours_df,
-                                                                                              'First Degree Institution Name')
-        recommended_Second_degree_institution = self.__find_three_most_common_items_in_current_column(neighbours_df,
-                                                                                               'Second Degree Institution Name')
+        
+        recommended_first_degree_institution = self.__find_three_most_common_items_in_current_column(neighbours_df, 'First Degree Institution Name')
+        recommended_Second_degree_institution = self.__find_three_most_common_items_in_current_column(neighbours_df, 'Second Degree Institution Name')
 
         # create two dictionaries with the recommended educations
         if recommended_first_degree_field != '':
@@ -162,10 +164,9 @@ class Recommendation:
     def __find_accomplished_job_items(self, user_input, recommended_job_dict_before_user):
         indices_to_delete_in_general_recommendation = set()
         indices_to_delete_in_user_input = set()
-        num_of_job_columns = 8
 
-        for i in range(1, num_of_job_columns + 1):
-            for j in range(1, num_of_job_columns + 1):
+        for i in range(1, 9):
+            for j in range(1, 9):
                 # if the user does a job that exists in any of the existing recommendation columns
                 if (user_input[f'Experience {i} Job Title'] == recommended_job_dict_before_user[f'Recommended job {j}'][0]):
                     # add the relevant index to delete later in the general recommendation
@@ -177,9 +178,11 @@ class Recommendation:
         index_to_delete_in_general_recommendation_list = list(indices_to_delete_in_general_recommendation)
         # sorting the list for deleting the n jobs from the end of the recommendation
         index_to_delete_in_general_recommendation_list.sort()
-
+        
         indices_to_delete = list()
-        for i in range(0, len(index_to_delete_in_user_list)):
+        # TODO: index_to_delete_in_user_list & index_to_delete_in_general_recommendation_list are not in same length and cause exception
+        #for i in range(0, len(index_to_delete_in_user_list)):
+        for i in range(0, len(index_to_delete_in_general_recommendation_list)):
             indices_to_delete.append(index_to_delete_in_general_recommendation_list[i])
 
         for k in indices_to_delete:
