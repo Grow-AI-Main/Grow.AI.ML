@@ -11,13 +11,15 @@ class Recommendation:
         df_len = len(neighbours_df)
 
         df_after_droping_naans = neighbours_df.drop(neighbours_df[neighbours_df[column] == ''].index)
-        column_list = df_after_droping_naans[column].tolist()
-        most_common_item = max(column_list, key=column_list.count)
 
-        counter = Counter(column_list)
+        if len(df_after_droping_naans) > 0:
+            column_list = df_after_droping_naans[column].tolist()
+            most_common_item = max(column_list, key=column_list.count)
 
-        if counter[most_common_item] >= min_occurences_percentage * df_len:
-            return most_common_item
+            counter = Counter(column_list)
+
+            if counter[most_common_item] >= min_occurences_percentage * df_len:
+                return most_common_item
 
         return ''
 
@@ -29,12 +31,14 @@ class Recommendation:
         top_three_colleges = []
 
         df_after_droping_naans = neiboughrs_df.drop(neiboughrs_df[neiboughrs_df[column] == ''].index)
-        colums_of_df = df_after_droping_naans[column].tolist()
-        most_common_three_items_in_column = Counter(colums_of_df)
-        college_name_and_num_of_appearnces = most_common_three_items_in_column.most_common(3)
-        top_three_colleges.append(college_name_and_num_of_appearnces[0][0])
-        top_three_colleges.append(college_name_and_num_of_appearnces[1][0])
-        top_three_colleges.append(college_name_and_num_of_appearnces[2][0])
+
+        if len(df_after_droping_naans) > 0:
+            colums_of_df = df_after_droping_naans[column].tolist()
+            most_common_three_items_in_column = Counter(colums_of_df)
+            college_name_and_num_of_appearnces = most_common_three_items_in_column.most_common(3)
+            top_three_colleges.append(college_name_and_num_of_appearnces[0][0])
+            top_three_colleges.append(college_name_and_num_of_appearnces[1][0])
+            top_three_colleges.append(college_name_and_num_of_appearnces[2][0])
 
         return top_three_colleges
 
