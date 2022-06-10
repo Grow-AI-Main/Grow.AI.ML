@@ -5,6 +5,7 @@ import recommendation
 import data_frame_manager
 import numpy as np
 
+
 class Logics:
     def __init__(self):
         self.keras_model = keras_model.KerasModel()
