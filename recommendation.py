@@ -68,7 +68,7 @@ class Recommendation:
         for column in range(1, num_of_job_columns + 1):
             comon_job_per_column = self.__find_most_common_item_in_current_column(neiboughrs_df,
                                                                            f'Experience {column} Job Title',
-                                                                           0.15)
+                                                                           0.10)
 
             if comon_job_per_column != '':                
                 avg_duration_per_job = self.__find_average_duration_of_common_job(neiboughrs_df, f'Experience {column} Job Title',
@@ -97,7 +97,7 @@ class Recommendation:
 
         recommended_first_degree_field = self.__find_most_common_item_in_current_column(neighbours_df, 'First Degree Field', 0.3)
         recommended_second_degree_field = self.__find_most_common_item_in_current_column(neighbours_df, 'Second Degree Field', 0.3)
-        
+
         recommended_first_degree_institution = self.__find_three_most_common_items_in_current_column(neighbours_df, 'First Degree Institution Name')
         recommended_Second_degree_institution = self.__find_three_most_common_items_in_current_column(neighbours_df, 'Second Degree Institution Name')
 
@@ -162,31 +162,41 @@ class Recommendation:
     # for example - if the general recommendation is to do 3 software jobs, and the user have done 1, it will recommend 2 jobs (what's left)
     # returns the final job recommendation
     def __find_accomplished_job_items(self, user_input, recommended_job_dict_before_user):
-        indices_to_delete_in_general_recommendation = set()
-        indices_to_delete_in_user_input = set()
 
-        for i in range(1, 9):
-            for j in range(1, 9):
-                # if the user does a job that exists in any of the existing recommendation columns
-                if (user_input[f'Experience {i} Job Title'] == recommended_job_dict_before_user[f'Recommended job {j}'][0]):
-                    # add the relevant index to delete later in the general recommendation
-                    indices_to_delete_in_general_recommendation.add(j)
-                    indices_to_delete_in_user_input.add(i)
+        # final list of indices that will be removed from the recommendation
+        final_jobs_to_remove_from_recommendation = set()
+        # list of indices to keep track on which jobs the user have done
+        user_job_index_for_comparing_duration = set()
+        num_of_job_columns = 8
+        # to keep track on the indices to delete from the recommendation
+        recommendation_job_index_for_comparing_duration = set()
+        # creating a list of the recommended job titles only
+        recommended_jobs = [v[0] for k, v in recommended_job_dict_before_user.items() if 'job' in k and v != '']
 
-        # turn the sets to list - so it will be iterable
-        index_to_delete_in_user_list = list(indices_to_delete_in_user_input)
-        index_to_delete_in_general_recommendation_list = list(indices_to_delete_in_general_recommendation)
-        # sorting the list for deleting the n jobs from the end of the recommendation
-        index_to_delete_in_general_recommendation_list.sort()
-        
-        indices_to_delete = list()
-        # TODO: index_to_delete_in_user_list & index_to_delete_in_general_recommendation_list are not in same length and cause exception
-        #for i in range(0, len(index_to_delete_in_user_list)):
-        for i in range(0, len(index_to_delete_in_general_recommendation_list)):
-            indices_to_delete.append(index_to_delete_in_general_recommendation_list[i])
+        # finding if a job done by the user is in the recommendation
+        for user_idx in range(1, num_of_job_columns + 1):
+            user_job = user_input[f'Experience {user_idx} Job Title']
+            # stoping after we've been over all the jobs the user have done
+            if user_job == '':
+                break
+            
+            for i, recommended_job in enumerate(recommended_jobs):
+                if recommended_job == user_job:
+                    user_job_index_for_comparing_duration.add(user_idx)
+                    recommendation_job_index_for_comparing_duration.add(i)
+                    recommended_jobs[i] = 'any string'
+                    break
 
-        for k in indices_to_delete:
-            del recommended_job_dict_before_user[f'Recommended job {k}']
+        if user_job_index_for_comparing_duration != -1 and recommendation_job_index_for_comparing_duration != -1:
+            for (user_job_index, recommendation_job_index) in zip(user_job_index_for_comparing_duration, recommendation_job_index_for_comparing_duration):
+                user_duration_current_job = user_input[f'Experience {user_job_index} Duration']
+                recommended_duration_current_job = recommended_job_dict_before_user[f'Recommended job {recommendation_job_index + 1}'][1]
+                # if the user's job duration is equal or longer than 70 percent of the recommended duration, delete it from the recommendation
+                if user_duration_current_job >= 0.7 * recommended_duration_current_job:
+                    final_jobs_to_remove_from_recommendation.add(f'Recommended job {recommendation_job_index + 1}')
+
+        for key in final_jobs_to_remove_from_recommendation:
+            recommended_job_dict_before_user.pop(key)
 
         return recommended_job_dict_before_user
 
@@ -204,11 +214,10 @@ class Recommendation:
             # if the current job title is the user's destination job
             if jobs_recommendation_after_user_jobs[i][1][0] == user_destination_job:
                 # remember the index of this title and raise flag
-                delete_from_here = i + 1
-                flag = 1
+                delete_from_here = i
                 break
 
-        if (delete_from_here != 0):
+        if (delete_from_here != -1):
             # delete all the job recommendations after acheiving the dream job
             del jobs_recommendation_after_user_jobs[delete_from_here:num_of_jobs_after_user_jobs]
 
@@ -229,6 +238,7 @@ class Recommendation:
         recommendation = dict()
         firstDegree = dict()
         secondDegree = dict()
+        job_dict = list()
 
         # if the first degree recommendation is not empty
         if first_deg_education_recommendation:
@@ -250,7 +260,6 @@ class Recommendation:
         if job_rec_after_achieving_detination_job:
             # turn the job dict into list so it will be iterable
             job_list = list(job_rec_after_achieving_detination_job.items())
-            job_dict = list()
             for i in range(0, len(job_list)):
                 job = {
                     'jobTitle': job_list[i][1][0],
