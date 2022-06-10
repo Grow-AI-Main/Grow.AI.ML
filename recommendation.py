@@ -68,7 +68,7 @@ class Recommendation:
         for column in range(1, num_of_job_columns + 1):
             comon_job_per_column = self.__find_most_common_item_in_current_column(neiboughrs_df,
                                                                            f'Experience {column} Job Title',
-                                                                           0.15)
+                                                                           0.10)
 
             if comon_job_per_column != '':                
                 avg_duration_per_job = self.__find_average_duration_of_common_job(neiboughrs_df, f'Experience {column} Job Title',
