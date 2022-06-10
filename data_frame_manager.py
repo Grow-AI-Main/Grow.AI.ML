@@ -4,7 +4,7 @@ import os
 
 class DataFrameManager:
     def __init__(self):
-        df = pd.read_csv(os.getcwd() + '/Data/data.csv')
+        df = pd.read_csv(os.getcwd() + '/Data/filtered_data_many_titles.csv')
         df.drop(['User Id', 'index'], axis=1, inplace=True)
         df = df.fillna('')
 
