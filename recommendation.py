@@ -97,7 +97,7 @@ class Recommendation:
 
         recommended_first_degree_field = self.__find_most_common_item_in_current_column(neighbours_df, 'First Degree Field', 0.3)
         recommended_second_degree_field = self.__find_most_common_item_in_current_column(neighbours_df, 'Second Degree Field', 0.3)
-        
+
         recommended_first_degree_institution = self.__find_three_most_common_items_in_current_column(neighbours_df, 'First Degree Institution Name')
         recommended_Second_degree_institution = self.__find_three_most_common_items_in_current_column(neighbours_df, 'Second Degree Institution Name')
 
@@ -161,41 +161,39 @@ class Recommendation:
     # it finds the jobs the user had already done and gets them off the recommendation
     # for example - if the general recommendation is to do 3 software jobs, and the user have done 1, it will recommend 2 jobs (what's left)
     # returns the final job recommendation
-    def __find_accomplished_job_items(self, user_input_df, recommended_job_dict_before_user):
+    def __find_accomplished_job_items(self, user_input, recommended_job_dict_before_user):
 
         # final list of indices that will be removed from the recommendation
         final_jobs_to_remove_from_recommendation = set()
         # list of indices to keep track on which jobs the user have done
-        user_job_idx_for_deleting = set()
+        user_job_index_for_comparing_duration = set()
         num_of_job_columns = 8
         # to keep track on the indices to delete from the recommendation
-        job_dict_idx = set()
+        recommendation_job_index_for_comparing_duration = set()
         # creating a list of the recommended job titles only
-        recommended_jobs = [v[0] for k, v in recommended_job_dict_before_user.items() if 'job' in k]
+        recommended_jobs = [v[0] for k, v in recommended_job_dict_before_user.items() if 'job' in k and v != '']
 
         # finding if a job done by the user is in the recommendation
         for user_idx in range(1, num_of_job_columns + 1):
-            user_job = user_input_df[f'Experience {user_idx} Job Title'][0]
+            user_job = user_input[f'Experience {user_idx} Job Title']
             # stoping after we've been over all the jobs the user have done
             if user_job == '':
                 break
+            
+            for i, recommended_job in enumerate(recommended_jobs):
+                if recommended_job == user_job:
+                    user_job_index_for_comparing_duration.add(user_idx)
+                    recommendation_job_index_for_comparing_duration.add(i)
+                    recommended_jobs[i] = 'any string'
+                    break
 
-            # finding all appearances of this job title done by the user (in the recommendation)
-            for j in range(0, len(recommended_jobs)):
-                if user_job == recommended_jobs[j]:
-                    for k in range(1, num_of_job_columns + 1):
-                        if user_input_df[f'Experience {k} Job Title'][0] == user_job:
-                            # remembering all the indices to check later if needs to be delete from the recommendation
-                            user_job_idx_for_deleting.add(k)
-                    job_dict_idx.add(j)
-
-            if job_dict_idx != -1:
-                for (h, idx_to_delete) in zip(job_dict_idx, user_job_idx_for_deleting):
-                    user_duration_current_job = user_input_df[f'Experience {idx_to_delete} Duration'][0]
-                    recommended_duration_current_job = recommended_job_dict_before_user[f'Recommended job {h + 1}'][1]
-                    # if the user's job duration is equal or longer than 70 percent of the recommended duration, delete it from the recommendation
-                    if recommended_duration_current_job * 0.7 <= user_duration_current_job:
-                        final_jobs_to_remove_from_recommendation.add(f'Recommended job {h + 1}')
+        if user_job_index_for_comparing_duration != -1 and recommendation_job_index_for_comparing_duration != -1:
+            for (user_job_index, recommendation_job_index) in zip(user_job_index_for_comparing_duration, recommendation_job_index_for_comparing_duration):
+                user_duration_current_job = user_input[f'Experience {user_job_index} Duration']
+                recommended_duration_current_job = recommended_job_dict_before_user[f'Recommended job {recommendation_job_index + 1}'][1]
+                # if the user's job duration is equal or longer than 70 percent of the recommended duration, delete it from the recommendation
+                if user_duration_current_job >= 0.7 * recommended_duration_current_job:
+                    final_jobs_to_remove_from_recommendation.add(f'Recommended job {recommendation_job_index + 1}')
 
         for key in final_jobs_to_remove_from_recommendation:
             recommended_job_dict_before_user.pop(key)
