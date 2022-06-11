@@ -92,25 +92,34 @@ class Recommendation:
         recommended_second_degree = dict()
 
         # find the most common items in the field, type and top 3 in the instituion columns
-        recommended_first_degree_level = self.__find_most_common_item_in_current_column(neighbours_df, 'First Degree')
-        recommended_second_degree_level = self.__find_most_common_item_in_current_column(neighbours_df, 'Second Degree')
+        recommended_first_degree_type = self.__find_most_common_item_in_current_column(neighbours_df, 'First Degree')
+        recommended_second_degree_type = self.__find_most_common_item_in_current_column(neighbours_df, 'Second Degree')
 
-        recommended_first_degree_field = self.__find_most_common_item_in_current_column(neighbours_df, 'First Degree Field', 0.3)
-        recommended_second_degree_field = self.__find_most_common_item_in_current_column(neighbours_df, 'Second Degree Field', 0.3)
+        recommended_first_degree_field = self.__find_most_common_item_in_current_column(neighbours_df, 'First Degree Field', 0.2)
+        recommended_second_degree_field = self.__find_most_common_item_in_current_column(neighbours_df, 'Second Degree Field', 0.2)
 
         recommended_first_degree_institution = self.__find_three_most_common_items_in_current_column(neighbours_df, 'First Degree Institution Name')
         recommended_Second_degree_institution = self.__find_three_most_common_items_in_current_column(neighbours_df, 'Second Degree Institution Name')
 
-        # create two dictionaries with the recommended educations
-        if recommended_first_degree_field != '':
-            recommended_first_degree.update({"Recommended First Degree Level": recommended_first_degree_level})
-            recommended_first_degree.update({"Recommended First Degree Field": recommended_first_degree_field})
-            recommended_first_degree.update({"Recommended top 3 First Degree Instituions": recommended_first_degree_institution})
+        # create dictionary with the recommended first degree
+        if recommended_first_degree_type != '':
+            recommended_first_degree['type'] = recommended_first_degree_type
 
-        if recommended_second_degree_field != '':
-            recommended_second_degree.update({"Recommended Second Degree Level": recommended_second_degree_level})
-            recommended_second_degree.update({"Recommended Second Degree Field": recommended_second_degree_field})
-            recommended_second_degree.update({"Recommended top 3 Second Degree Instituions": recommended_Second_degree_institution})
+            if recommended_first_degree_field != '':
+                recommended_first_degree['field'] = recommended_first_degree_field
+
+            if recommended_first_degree_institution != '':
+                recommended_first_degree['institutionName'] = recommended_first_degree_institution
+
+        # create dictionary with the recommended second degree
+        if recommended_second_degree_type != '':
+            recommended_second_degree['type'] = recommended_second_degree_type
+
+            if recommended_second_degree_field != '':
+                recommended_second_degree['field'] = recommended_second_degree_field
+
+            if recommended_Second_degree_institution != '':
+                recommended_second_degree['institutionName'] = recommended_Second_degree_institution
 
         return recommended_first_degree, recommended_second_degree
 
@@ -120,38 +129,34 @@ class Recommendation:
     # it comapares the general education recommendation to what the user have already studied
     # and returns the recommendation after taking out what the user have already studied - of the first and second degrees
     def __find_accomplished_education_items(self, user_input, recommended_first_degree, recommended_second_degree):
-        keys_to_delete_first_degree = []
-        keys_to_delete_second_degree = []
-        users_first_degree_field = user_input['First Degree Field']
-        users_second_degree_field = user_input['Second Degree Field']
-        recommended_first_degree_field = ''
-        recommended_second_degree_field = ''
+        delete_first_degree = False
+        delete_second_degree = False
+        users_first_degree_type = user_input['First Degree']
+        users_second_degree_type = user_input['Second Degree']
+        recommended_first_degree_type = ''
+        recommended_second_degree_type = ''
 
-        # init recommended degrees fields
+        # init recommended degrees types
         if recommended_first_degree:
-            recommended_first_degree_field = recommended_first_degree['Recommended First Degree Field']
+            recommended_first_degree_type = recommended_first_degree['type']
 
         if recommended_second_degree:
-            recommended_second_degree_field = recommended_second_degree['Recommended Second Degree Field']
+            recommended_second_degree_type = recommended_second_degree['type']
 
         # in the case below - is when a person have studied the same degree as their allocated cluster - in one of three top places
-        if users_first_degree_field == recommended_first_degree_field:
-            keys_to_delete_first_degree = ["Recommended First Degree Field", "Recommended First Degree Level",
-                                           "Recommended top 3 First Degree Instituions"]
+        if users_first_degree_type == recommended_first_degree_type:
+            delete_first_degree = True
         # take all theses out in varibales - explample - user degree
 
         # in the case below - the same goes for a second degree
-        if users_second_degree_field == recommended_second_degree_field:
-            keys_to_delete_second_degree = ["Recommended Second Degree Level", "Recommended First Degree Field",
-                                            "Recommended top 3 Second Degree Instituions"]
+        if users_second_degree_type == recommended_second_degree_type:
+            delete_second_degree = True
 
-        if recommended_first_degree:
-            for key in keys_to_delete_first_degree:
-                del recommended_first_degree[key]
+        if recommended_first_degree and delete_first_degree:
+            recommended_first_degree = dict()
 
-        if recommended_second_degree:
-            for key in keys_to_delete_second_degree:
-                del recommended_second_degree[key]
+        if recommended_second_degree and delete_second_degree:
+            recommended_second_degree = dict()
 
         return recommended_first_degree, recommended_second_degree
 
@@ -236,25 +241,7 @@ class Recommendation:
                                  job_rec_after_achieving_detination_job):
 
         recommendation = dict()
-        firstDegree = dict()
-        secondDegree = dict()
         job_dict = list()
-
-        # if the first degree recommendation is not empty
-        if first_deg_education_recommendation:
-            firstDegree = {
-                'type': first_deg_education_recommendation['Recommended First Degree Level'],
-                'field': first_deg_education_recommendation['Recommended First Degree Field'],
-                'institutionName': first_deg_education_recommendation['Recommended top 3 First Degree Instituions']
-            }
-
-        # if the second degree recommendation is not empty
-        if second_deg_education_recommedation:
-            secondDegree = {
-                'type': second_deg_education_recommedation['Recommended Second Degree Level'],
-                'field': second_deg_education_recommedation['Recommended Second Degree Field'],
-                'institutionName': second_deg_education_recommedation['Recommended top 3 Second Degree Instituions']
-            }
 
         # if the job recommendation is not empty
         if job_rec_after_achieving_detination_job:
@@ -269,8 +256,8 @@ class Recommendation:
 
         recommendation = {
             'experiences': job_dict,
-            'firstDegreeRecommendation': firstDegree,
-            'secondDegreeRecommendation': secondDegree
+            'firstDegreeRecommendation': first_deg_education_recommendation,
+            'secondDegreeRecommendation': second_deg_education_recommedation
         }
         return recommendation
 
