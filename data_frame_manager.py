@@ -29,6 +29,9 @@ class DataFrameManager:
 
         if '' in destination_jobs_list:
             destination_jobs_list.remove('')
+
+        if 'Product Manager' in destination_jobs_list:
+            destination_jobs_list.remove('Product Manager')
             
         destination_jobs_list.sort()
 
