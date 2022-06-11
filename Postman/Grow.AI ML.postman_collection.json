@@ -155,6 +155,28 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "LinkedIn Profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{address}}:{{port}}/resources/linkedin/profile/tom-pony",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"resources",
+								"linkedin",
+								"profile",
+								"tom-pony"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -184,7 +206,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"experiences\": [\r\n\t\t{\r\n\t\t\t\"jobTitle\": \"Software Developer\",\r\n\t\t\t\"duration\": 5\r\n\t\t},\r\n\t\t{\r\n\t\t\t\"jobTitle\": \"Software Developer\",\r\n\t\t\t\"duration\": 12\r\n\t\t}\r\n\t],\r\n\t\"firstDegree\": {\r\n\t\t\"type\": \"B.Sc\",\r\n\t\t\"field\": \"Computer Science\",\r\n\t\t\"institutionName\": \"Technion - Israel Institute Of Technology\"\r\n\t},\r\n\t\"secondDegree\": {\r\n\t\t\"type\": \"M.Sc\",\r\n\t\t\"field\": \"Computer Science\",\r\n\t\t\"institutionName\": \"Technion - Israel Institute Of Technology\"\r\n\t},\r\n    \"destination_job\": \"Software Developer Team Lead\"\r\n}",
+					"raw": "{\r\n\t\"experiences\": [\r\n\r\n\t],\r\n\t\"firstDegree\": {\r\n\t\t\"type\": \"B.Sc\",\r\n\t\t\"field\": \"Computer Science\",\r\n\t\t\"institutionName\": \"Hadassah Academic College\"\r\n\t},\r\n    \"destination_job\": \"Product Manager\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
