@@ -43,7 +43,7 @@ class Logics:
 
         data_frame_by_destination_job = self.data_frame_manager.filter_data_frame_by_destination_job(destination_job)
 
-        neighbors_df = self.KNN.get_neighbors(encoded_items, encoded_user_item, data_frame_by_destination_job, 100)
+        neighbors_df = self.KNN.get_neighbors(encoded_items, encoded_user_item, data_frame_by_destination_job, 300)
 
         user_input = {name: value for name, value in user_df.iloc[0].items()}
 
