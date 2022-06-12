@@ -1,11 +1,13 @@
 import logics
 import data_frame_manager
+import linkedin_api
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 
 logics = logics.Logics()
 data_frame_manager = data_frame_manager.DataFrameManager()
+linkedin_api = linkedin_api.LinkedinApi()
 
 app = Flask(__name__)
 CORS(app)
@@ -72,6 +74,12 @@ def filter_degree_institutions(degree_type, degree_field):
     degree_institutions = data_frame_manager.get_unique_degree_institutions_by_degree_type_and_degree_field(degree_type, degree_field)
 
     return jsonify(institutions=degree_institutions)
+
+
+@app.route('/resources/linkedin/profile/<string:profile_name>', methods=['GET'])
+def get_linkedin_data(profile_name):
+    linkedin_data = linkedin_api.get_profile_data(profile_name)
+    return linkedin_data
 
 
 @app.errorhandler(ValueError)
