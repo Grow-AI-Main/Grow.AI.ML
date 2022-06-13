@@ -1,6 +1,7 @@
 import logics
 import data_frame_manager
 import linkedin_api
+import adds_provider
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
@@ -8,6 +9,8 @@ from flask_cors import CORS
 logics = logics.Logics()
 data_frame_manager = data_frame_manager.DataFrameManager()
 linkedin_api = linkedin_api.LinkedinApi()
+adds_provider = adds_provider.AddsProvider()
+
 
 app = Flask(__name__)
 CORS(app)
@@ -82,6 +85,18 @@ def get_linkedin_data(profile_name):
     return linkedin_data
 
 
+@app.route('/resources/adds/jobs/<string:destination_job>', methods=['GET'])
+def get_jobs_adds(destination_job):
+    jobs = adds_provider.provide_jobs_adds(destination_job)
+    return jsonify(jobs=jobs)
+
+
+@app.route('/resources/adds/educations/<string:degree_type>', methods=['GET'])
+def get_educations_adds(degree_type):
+    educations = adds_provider.provide_educations_adds(degree_type)
+    return jsonify(educations)
+
+
 @app.errorhandler(ValueError)
 def value_error(e):          
     return f'A value error occurred: {e}', 404
@@ -93,4 +108,4 @@ def basic_error(e):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
+    app.run(host='0.0.0.0', port=4000)

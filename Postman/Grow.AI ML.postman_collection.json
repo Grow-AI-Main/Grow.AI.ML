@@ -177,6 +177,50 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Job Adds",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{address}}:{{port}}/resources/adds/jobs/Software Developer Team Lead",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"resources",
+								"adds",
+								"jobs",
+								"Software Developer Team Lead"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Education Adds",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{address}}:{{port}}/resources/adds/educations/M.B.A.",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"resources",
+								"adds",
+								"educations",
+								"M.B.A."
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
