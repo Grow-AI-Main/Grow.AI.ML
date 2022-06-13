@@ -13,19 +13,6 @@ class LinkedinApi:
             profile_data = {
                 'experiences': [
                     {
-                        'jobTitle': 'Software Developer',
-                        'companyName': 'IDF - Unit 8200',
-                        'duration': 12,
-                        'startDate': {
-                            'year': 2017,
-                            'month': ''
-                        },
-                        'endDate': {
-                            'year': 2018,
-                            'month': ''
-                        }
-                    },
-                    {
                         'jobTitle': 'QA',                        
                         'companyName': 'IDF - Unit 8200',
                         'duration': 12,
@@ -91,7 +78,7 @@ class LinkedinApi:
                     },
                     {
                         'jobTitle': 'Software Developer',                        
-                        'companyName': 'IDF - Unit 8200',
+                        'companyName': 'DocuSign',
                         'duration': 16,
                         'startDate': {
                             'year': 2021,
